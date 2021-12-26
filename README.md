@@ -14,4 +14,4 @@
 - Add keyboard support
 
 ### Live demo
-linh15.github.io/calculator/
+https://linh15.github.io/calculator/
