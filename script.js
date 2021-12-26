@@ -61,15 +61,22 @@ Array.from(operators).forEach(function(element) {
 
 function getOperator() {
   currentOp = this.id;
-  if (previousOp == '') {
-    sum = currentNum;
+  if (currentNum == '') {
+    display("Error, reset!");
+    reset();
+  } else {
+    if (previousOp == '') {
+      sum = currentNum;
+    }
+
+    if (previousNum !== '') {
+      calculate(currentOp);
+    }
+    previousNum = sum;
+    previousOp = currentOp;
+    currentNum = '';
   }
-  if (previousNum !== '') {
-    calculate(currentOp);
-  }
-  previousNum = sum;
-  previousOp = currentOp;
-  currentNum = '';
+
 }
 
 
@@ -80,14 +87,44 @@ function display(displayValue) {
 }
 
 
+// calculate the input numbers with chosen operator
 function calculate(operator) {
   let current = parseInt(currentNum);
   let prev = parseInt(previousNum);
   if (operator !== "equal") {
       sum = operate(previousOp, prev, current);
-      previousNum = sum.toString();
+      if (previousOp == 'divide' && current == 0) {
+        display('Error, reset!');
+        reset();
+      } else {
+        display(sum);
+        previousNum = sum.toString();
+      }
   } else if (operator == "equal") {
     sum = operate(previousOp, prev, current);
-    display(sum);
+    if (previousOp == 'divide' && current == 0) {
+      display('Error, reset!');
+      reset();
+    } else {
+      display(Math.round(sum * 100000000) / 100000000);
+      reset();
+    }
   }
+}
+
+// reset all variables, used when user hits equal '=' or AC
+function reset() {
+  previousNum = '';
+  currentNum = '';
+  sum = '';
+  previousOp = '';
+  currentOp = '';
+}
+
+// click AC button -> reset
+document.getElementById("AC").addEventListener("click", allClear);
+
+function allClear() {
+  reset();
+  display(sum);
 }
